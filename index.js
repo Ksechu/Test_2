@@ -21,7 +21,7 @@ const DOTES = [
     { i: 200, j: 100},
     { i: 300, j: 100},
     { i: 400, j: 100}*/
-  //тест 5!!!!
+  //тест 5
     /*{ i: 100, j: 100},
     { i: 100, j: 200},
     { i: 200, j: 100},
@@ -44,21 +44,21 @@ const DOTES = [
     { i: 400, j: 300},
     { i: 400, j: 400}*/
   //тест 8
-    { i: 200, j: 300},
+    /*{ i: 200, j: 300},
     { i: 300, j: 100},
     { i: 300, j: 300},
     { i: 500, j: 100},
     { i: 500, j: 200},
-    { i: 600, j: 300}
+    { i: 600, j: 300}*/
   //тест 9
-    /*{ i: 100, j: 800},
+    { i: 100, j: 800},
     { i: 200, j: 500},
     { i: 200, j: 900},
     { i: 1200, j: 100},
     { i: 1400, j: 600},
     { i: 1600, j: 100},
     { i: 1700, j: 500},
-    { i: 1700, j: 900}*/
+    { i: 1700, j: 900}
 
 ];
 
@@ -73,7 +73,6 @@ function boot() {
   });
 
   document.body.appendChild(app.view);
-
 
   var graphics = new PIXI.Graphics();
 
@@ -106,26 +105,36 @@ function boot() {
   //получение двух координат прямой и ее отрисовка
   let line = calcLineEquation(DOTES);
 
-  /*k = (line.y1 - line.y2) / (line.x1 - line.x2);
-  b = line.y2 - k * line.x2;
+  //условие на каноническое уравнение или параметрическое
+  if ((line.x1 - line.x2 == 0)){
+    startX = line.x1;
+    startY = 0;
+    finishX = line.x1;
+    finishY = 1000;
+    console.log('Уравнение прямой : x = ',line.x1);
 
-  startX = max(maxY, maxX);
-  startY = k*startX + b;
-  finishX = min(minX, minY);
-  finishY = k*finishX + b;
+  } else{ 
+    k = (line.y1 - line.y2) / (line.x1 - line.x2);
+    b = line.y2 - k * line.x2;
 
-  console.log(k,' ',b);
+    startX = 10000;
+    startY = k*startX + b;
+    finishX = 0;
+    finishY = k*finishX + b;
+    console.log('Каноническое уравнение : y = ',k,' x + ',b);
+  }
 
-  graphics.lineStyle(7, BLUE, 1);
-  graphics.moveTo(startX, startY);
-  graphics.lineTo(finishX, finishY);
-  app.stage.addChild(graphics);*/
-  graphics.lineStyle(7, BLUE, 1);
-  graphics.moveTo(line.x1, line.y1);
-  graphics.lineTo(line.x2, line.y2);
-  app.stage.addChild(graphics);
+    graphics.lineStyle(7, BLUE, 1);
+    graphics.moveTo(startX, startY);
+    graphics.lineTo(finishX, finishY);
+    app.stage.addChild(graphics);
 
+    /*graphics.lineStyle(7, BLUE, 1);
+    graphics.moveTo(line.x1, line.y1);
+    graphics.lineTo(line.x2, line.y2);
+    app.stage.addChild(graphics);*/
 
+    console.log(k,' ',b);
 
   //функция вычеслений
   function calcLineEquation(arrayDotes) {
@@ -211,10 +220,12 @@ function boot() {
 
           arrayDotes.forEach(element => {
             n = (element.i - x1) * (y2 - y1) - (x2 - x1) * (element.j - y1);
-            switch (true){
-              case (n > 0) : countUnder++;break;
-              case (n < 0) : countAbove++;break;
-              case (n == 0) : countOn++;break;
+            if (n > 0) {
+              countUnder++;
+            } else if (n < 0) { 
+              countAbove++;
+            } else if (n == 0) {
+              countOn++;
             }           
           });
           
@@ -231,10 +242,10 @@ function boot() {
 
     //проверка на лежание всех точек на одной прямой по x или y
     if (countX == arrayDotes.length){
-      return {x1: x1, y1: y1, x2: x1+100, y2: y1};
+      return {x1: x1, y1: y1, x2: x1 + 100, y2: y1};
     } else
     if (countY == arrayDotes.length){
-      return {x1: x1, y1: y1, x2: x1, y2: y1+100};
+      return {x1: x1, y1: y1, x2: x1, y2: y1 + 100};
     } else {
       return {x1: x1, y1: y1, x2: x2, y2: y2};
     }
