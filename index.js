@@ -44,21 +44,25 @@ const DOTES = [
     { i: 400, j: 300},
     { i: 400, j: 400}*/
   //тест 8
-    /*{ i: 200, j: 300},
+    { i: 200, j: 300},
     { i: 300, j: 100},
     { i: 300, j: 300},
     { i: 500, j: 100},
     { i: 500, j: 200},
-    { i: 600, j: 300}*/
+    { i: 600, j: 200}
   //тест 9
-    { i: 100, j: 800},
+    /*{ i: 100, j: 800},
     { i: 200, j: 500},
     { i: 200, j: 900},
     { i: 1200, j: 100},
     { i: 1400, j: 600},
     { i: 1600, j: 100},
     { i: 1700, j: 500},
-    { i: 1700, j: 900}
+    { i: 1700, j: 900}*/
+  //тест 10
+    /*{ i: 100, j: 100},
+    { i: 300, j: 100},
+    { i: 500, j: 100}*/
 
 ];
 
@@ -166,7 +170,6 @@ function boot() {
           
           x_ = x_0 + (x_1 - x_0) / 2;
           y_ = y_0 + (y_1 - y_0) / 2; 
-          console.log(x_,' ',y_); 
           
           objmiddlePoint.i = x_;
           objmiddlePoint.j = y_;
@@ -177,38 +180,51 @@ function boot() {
     });
 
     //средняя точка между средней точкой и следующей от средней
-      x_0 = arrayDotes[arrayDotes.length / 2 - 1].i;
-      y_0 = arrayDotes[arrayDotes.length / 2 - 1].j;
-      x_1 = arrayDotes[arrayDotes.length / 2].i;
-      y_1 = arrayDotes[arrayDotes.length / 2].j;
+      if (arrayDotes.length % 2 == 0) {
+        x_0 = arrayDotes[arrayDotes.length / 2 - 1].i;
+        y_0 = arrayDotes[arrayDotes.length / 2 - 1].j;
+        x_1 = arrayDotes[arrayDotes.length / 2].i;
+        y_1 = arrayDotes[arrayDotes.length / 2].j;
   
-      x1 = x_0 + (x_1 - x_0) / 2;
-      y1 = y_0 + (y_1 - y_0) / 2;
+        x1 = x_0 + (x_1 - x_0) / 2;
+        y1 = y_0 + (y_1 - y_0) / 2;
 
+        N = 0;
+      } else {
+        x1 = arrayDotes[Math.floor(arrayDotes.length / 2)].i;
+        y1 = arrayDotes[Math.floor(arrayDotes.length / 2)].j;
+        console.log(x1,' ',y1);
+        
+        N = 1;
+      }
+
+      x2 = arrayDotes[Math.floor(arrayDotes.length / 2 - 1)].i;
+      y2 = arrayDotes[Math.floor(arrayDotes.length / 2)].j;
+        
     /*graphics.lineStyle(7, BLUE, 1);
     graphics.beginFill(BLUE);
     graphics.drawCircle(x1, y1, 3);
     graphics.endFill();
     app.stage.addChild(graphics);*/
 
-    //проверка на нахождение точек на одной прямой по диагонали
-
-    x2 = arrayDotes[arrayDotes.length / 2 - 1].i;
-    y2 = arrayDotes[arrayDotes.length / 2].j;
+    //проверка на нахождение точек на одной прямой по диагонали 
+    
 
     let countAbove = 0, countUnder = 0, countOn=0;
     arrayDotes.forEach(element => {
       n = (element.i - x1) * (y2 - y1) - (x2 - x1) * (element.j - y1);
-      switch (true){
-        case (n > 0) : countUnder++;break;
-        case (n < 0) : countAbove++;break;
-        case (n == 0) : countOn++;break;
-      }           
+      if (n > 0) {
+        countUnder++;
+      } else if (n < 0) { 
+        countAbove++;
+      } else if (n == 0) {
+        countOn++;
+      }         
     });
 
     console.log(x2,' ',y2,' точка между средней и следующей');
 
-    if ((countUnder != countAbove)||(countOn != 0)){  
+    if ((countUnder != countAbove)||(countOn != N)){  
       //проверка второй координаты прямой
       let counter = 0;
       middlePoint.forEach(element => {
@@ -230,7 +246,7 @@ function boot() {
           });
           
 
-        if ((countUnder == countAbove)&&(countOn == 0)) {
+        if ((countUnder == countAbove)&&(countOn == N)) {
           counter = 1; 
 
           console.log(x2,' ',y2,' точка из масива')
